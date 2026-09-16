@@ -1,4 +1,4 @@
-package java.dev.arrays;
+package main.java.dev.arrays;
 
 public class DynamicArray {
     private  int nrElements=0;

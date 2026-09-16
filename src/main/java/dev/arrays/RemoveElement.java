@@ -1,4 +1,4 @@
-package java.dev.arrays;
+package main.java.dev.arrays;
 
 public class RemoveElement {
     public int removeElement(int[] nums, int val) {

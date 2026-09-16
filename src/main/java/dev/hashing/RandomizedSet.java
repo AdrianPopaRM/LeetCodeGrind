@@ -1,4 +1,4 @@
-package java.dev.hashing;
+package main.java.dev.hashing;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,8 +32,8 @@ public class RandomizedSet {
 }
 
 /**
- * Your java.dev.hashing.RandomizedSet object will be instantiated and called as such:
- * java.dev.hashing.RandomizedSet obj = new java.dev.hashing.RandomizedSet();
+ * Your main.java.dev.hashing.RandomizedSet object will be instantiated and called as such:
+ * main.java.dev.hashing.RandomizedSet obj = new main.java.dev.hashing.RandomizedSet();
  * boolean param_1 = obj.insert(val);
  * boolean param_2 = obj.remove(val);
  * int param_3 = obj.getRandom();

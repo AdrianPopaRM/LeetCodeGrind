@@ -1,4 +1,4 @@
-package java.dev.arrays;
+package main.java.dev.arrays;
 
 public class BestTimeToBuyAndSellStock2 {
     public int maxProfit(int[] prices) {

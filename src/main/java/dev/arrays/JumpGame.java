@@ -1,4 +1,4 @@
-package java.dev.arrays;
+package main.java.dev.arrays;
 
 public class JumpGame {
     public boolean canJump(int[] nums) {

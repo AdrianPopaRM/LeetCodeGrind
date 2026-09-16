@@ -1,4 +1,4 @@
-package java.dev.arrays;
+package main.java.dev.arrays;
 
 public class ProductOfArrayExceptSelf {
     //Must be solved in O(n) and cannot use DIVISION.
