@@ -1,8 +1,9 @@
+package java.dev.hashing;
+
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
-class RandomizedSet {
+public class RandomizedSet {
     private Set<Integer> set= new HashSet<>();
     public RandomizedSet() {
 
@@ -31,8 +32,8 @@ class RandomizedSet {
 }
 
 /**
- * Your RandomizedSet object will be instantiated and called as such:
- * RandomizedSet obj = new RandomizedSet();
+ * Your java.dev.hashing.RandomizedSet object will be instantiated and called as such:
+ * java.dev.hashing.RandomizedSet obj = new java.dev.hashing.RandomizedSet();
  * boolean param_1 = obj.insert(val);
  * boolean param_2 = obj.remove(val);
  * int param_3 = obj.getRandom();

@@ -1,3 +1,5 @@
+package java.dev.arrays;
+
 public class BestTimeToBuyAndSellStock {
     public int maxProfitInefficient(int[] prices) {
         int profit=0;

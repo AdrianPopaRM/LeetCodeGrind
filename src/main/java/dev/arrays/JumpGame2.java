@@ -1,3 +1,5 @@
+package java.dev.arrays;
+
 public class JumpGame2 {
 //    public int jump(int[] nums) {
 //        int nrJumps=0, reach=nums[0]-1, target=nums.length-1;

@@ -1,3 +1,5 @@
+package java.dev.arrays;
+
 import java.util.Vector;
 
 public class RemoveDuplicatesFromSortedArray {

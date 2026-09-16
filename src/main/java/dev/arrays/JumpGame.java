@@ -1,3 +1,5 @@
+package java.dev.arrays;
+
 public class JumpGame {
     public boolean canJump(int[] nums) {
         int currentIndex=0,targetIndex=nums.length-1;

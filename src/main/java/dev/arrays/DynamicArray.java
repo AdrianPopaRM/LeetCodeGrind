@@ -1,4 +1,6 @@
-class DynamicArray {
+package java.dev.arrays;
+
+public class DynamicArray {
     private  int nrElements=0;
     private int[] array;
     public DynamicArray(int capacity) {

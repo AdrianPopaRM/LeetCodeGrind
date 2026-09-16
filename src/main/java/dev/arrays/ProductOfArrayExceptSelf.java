@@ -1,3 +1,5 @@
+package java.dev.arrays;
+
 public class ProductOfArrayExceptSelf {
     //Must be solved in O(n) and cannot use DIVISION.
     public int[] productExceptSelf(int[] nums) {

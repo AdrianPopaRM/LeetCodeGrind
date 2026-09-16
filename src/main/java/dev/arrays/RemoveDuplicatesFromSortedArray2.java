@@ -1,4 +1,4 @@
-import java.util.Vector;
+package java.dev.arrays;
 
 public class RemoveDuplicatesFromSortedArray2 {
     public int removeDuplicates(int[] nums) {

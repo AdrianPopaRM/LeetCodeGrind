@@ -1,3 +1,5 @@
+package java.dev.arrays;
+
 public class HIndex {
     public int hIndex(int[] citations) {
         int hMax=0;

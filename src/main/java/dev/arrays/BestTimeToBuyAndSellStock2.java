@@ -1,3 +1,5 @@
+package java.dev.arrays;
+
 public class BestTimeToBuyAndSellStock2 {
     public int maxProfit(int[] prices) {
         int profit=0,buy=prices[0],alternateProfit=0;

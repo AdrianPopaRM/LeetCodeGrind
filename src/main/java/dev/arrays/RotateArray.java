@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+package java.dev.arrays;
 
 public class RotateArray {
     public void rotate(int[] nums, int k) {
