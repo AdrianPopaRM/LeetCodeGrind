@@ -60,20 +60,20 @@ public class MinimumSizeSubarraySum {
         return minLength==1000000? 0:minLength;
     }
 
-    public int minSubArrayLenOptim(int target, int[] nums){
-        int arrSize = nums.length;
-        int[] prefixSum = new int[arrSize];
-
-        prefixSum[0]= nums[0];
-        for(int i=1; i<arrSize;i++){
-            prefixSum[i] = prefixSum[i-1] + nums[i];
-        }
-
-        int[] complementary = new int[arrSize];
-        for(int i=0; i<arrSize; i++){
-            complementary[i] = target - prefixSum[i];
-        }
-    }
+//    public int minSubArrayLenOptim(int target, int[] nums){
+//        int arrSize = nums.length;
+//        int[] prefixSum = new int[arrSize];
+//
+//        prefixSum[0]= nums[0];
+//        for(int i=1; i<arrSize;i++){
+//            prefixSum[i] = prefixSum[i-1] + nums[i];
+//        }
+//
+//        int[] complementary = new int[arrSize];
+//        for(int i=0; i<arrSize; i++){
+//            complementary[i] = target - prefixSum[i];
+//        }
+//    }
     public static void main(String args[]) {
         MinimumSizeSubarraySum test = new MinimumSizeSubarraySum();
         int[] nums1={2,3,1,2,4,3};
