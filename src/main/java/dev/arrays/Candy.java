@@ -3,94 +3,118 @@ package main.java.dev.arrays;
 import java.util.Arrays;
 
 public class Candy {
-    enum Monotony {
-        DESCENDING,
-        ASCENDING,
-        NOT_DETERMINED
-    }
 
     public int candy(int[] ratings) {
-        int minNrCandies = 0, currentMonotonousStreak = 1;
         int size = ratings.length;
-        Monotony monotony = Monotony.NOT_DETERMINED;
-
-        if (size == 1) {
-            return 1;
-        }
-
-        if (ratings[0] == ratings[1]) {
-            minNrCandies++;
-        }
+        int[] candyDistribution = new int[size];
+        candyDistribution[0] = 1;
         for (int i = 1; i < size; i++) {
-            //ASCENDING
+            candyDistribution[i] = 1;
             if (ratings[i] > ratings[i - 1]) {
-                switch (monotony){
-                    case NOT_DETERMINED:
-                    {
-                        monotony= Monotony.ASCENDING;
-                        currentMonotonousStreak++;
-                        break;
-                    }
-                    case ASCENDING:
-                    {
-                        currentMonotonousStreak++;
-                        break;
-                    }
-                    case DESCENDING:
-                    {
-                        minNrCandies+=currentMonotonousStreak*(currentMonotonousStreak+1)/2-1;
-                        currentMonotonousStreak=2;
-                        monotony = Monotony.ASCENDING;
-                        break;
-                    }
-                }
-                continue;
-            }
-            //DESCENDING
-            if ( ratings[i] < ratings[i - 1] ){
-                switch (monotony){
-                    case NOT_DETERMINED:
-                    {
-                        monotony= Monotony.DESCENDING;
-                        currentMonotonousStreak++;
-                        break;
-                    }
-                    case DESCENDING:
-                    {
-                        currentMonotonousStreak++;
-                        break;
-                    }
-                    case ASCENDING:
-                    {
-                        minNrCandies += (currentMonotonousStreak-1)*currentMonotonousStreak/2;
-                        currentMonotonousStreak=2;
-                        monotony = Monotony.DESCENDING;
-                        break;
-                    }
-                }
-                continue;
-            }
-            if ( ratings[i] == ratings[i - 1] ) {
-                if (currentMonotonousStreak > 1) {
-                    minNrCandies += currentMonotonousStreak * (currentMonotonousStreak + 1) / 2;
-                    currentMonotonousStreak = 1;
-                    monotony = Monotony.NOT_DETERMINED;
-                }
-                if (i == size - 1) {
-                    minNrCandies++;
-                } else {
-                    if (ratings[i] == ratings[i + 1]) {
-                        minNrCandies++;
-                    }
+                if (candyDistribution[i] <= candyDistribution[i - 1]) {
+                    candyDistribution[i] = candyDistribution[i - 1] + 1;
                 }
             }
         }
-        if(currentMonotonousStreak>1){
-            minNrCandies += currentMonotonousStreak * (currentMonotonousStreak + 1) / 2;
+        for (int i = size - 2; i >= 0; i--) {
+            if (ratings[i] > ratings[i + 1]) {
+                if (candyDistribution[i] <= candyDistribution[i + 1]) {
+                    candyDistribution[i] = candyDistribution[i + 1] + 1;
+                }
+            }
         }
-
-        return minNrCandies;
+        return Arrays.stream(candyDistribution).sum();
     }
+
+//    enum Monotony {
+//        DESCENDING,
+//        ASCENDING,
+//        NOT_DETERMINED
+//    }
+//
+//    public int candy(int[] ratings) {
+//        int minNrCandies = 0, currentMonotonousStreak = 1;
+//        int size = ratings.length;
+//        Monotony monotony = Monotony.NOT_DETERMINED;
+//
+//        if (size == 1) {
+//            return 1;
+//        }
+//
+//        if (ratings[0] == ratings[1]) {
+//            minNrCandies++;
+//        }
+//        for (int i = 1; i < size; i++) {
+//            //ASCENDING
+//            if (ratings[i] > ratings[i - 1]) {
+//                switch (monotony){
+//                    case NOT_DETERMINED:
+//                    {
+//                        monotony= Monotony.ASCENDING;
+//                        currentMonotonousStreak++;
+//                        break;
+//                    }
+//                    case ASCENDING:
+//                    {
+//                        currentMonotonousStreak++;
+//                        break;
+//                    }
+//                    case DESCENDING:
+//                    {
+//                        minNrCandies+=currentMonotonousStreak*(currentMonotonousStreak+1)/2-1;
+//                        currentMonotonousStreak=2;
+//                        monotony = Monotony.ASCENDING;
+//                        break;
+//                    }
+//                }
+//                continue;
+//            }
+//            //DESCENDING
+//            if ( ratings[i] < ratings[i - 1] ){
+//                switch (monotony){
+//                    case NOT_DETERMINED:
+//                    {
+//                        monotony= Monotony.DESCENDING;
+//                        currentMonotonousStreak++;
+//                        break;
+//                    }
+//                    case DESCENDING:
+//                    {
+//                        currentMonotonousStreak++;
+//                        break;
+//                    }
+//                    case ASCENDING:
+//                    {
+//                        minNrCandies += (currentMonotonousStreak-1)*currentMonotonousStreak/2;
+//                        currentMonotonousStreak=2;
+//                        monotony = Monotony.DESCENDING;
+//                        break;
+//                    }
+//                }
+//                continue;
+//            }
+//            if ( ratings[i] == ratings[i - 1] ) {
+//                if (currentMonotonousStreak > 1) {
+//                    minNrCandies += currentMonotonousStreak * (currentMonotonousStreak + 1) / 2;
+//                    currentMonotonousStreak = 1;
+//                    monotony = Monotony.NOT_DETERMINED;
+//                }
+//                if (i == size - 1) {
+//                    minNrCandies++;
+//                } else {
+//                    if (ratings[i] == ratings[i + 1]) {
+//                        minNrCandies++;
+//                    }
+//                }
+//            }
+//        }
+//
+//        if(currentMonotonousStreak>1){
+//            minNrCandies += currentMonotonousStreak * (currentMonotonousStreak + 1) / 2;
+//        }
+//
+//        return minNrCandies;
+//    }
 
 //    public int candy(int[] ratings) {
 //        int minNrCandies = 0, currentMonotonousStreak = 1;
@@ -134,10 +158,17 @@ public class Candy {
         int[] testRatings2 = {6, 5, 4, 4, 4, 3, 2};
         int[] testRatings3 = {1, 2, 5, 5, 5, 4, 6, 7};
         int[] testRatings4 = {1, 3, 5, 4, 3, 2, 1, 6, 7};
-        System.out.println("Expected output: 7, actual output: " +candy.candy(testRatings1));
+        int[] testRatings5 = {3, 5, 7, 6, 8, 9, 10};
+        int[] testRatings6 = {1, 3, 4, 5, 2};
+
+        System.out.println("Expected output: 7, actual output: " + candy.candy(testRatings1));
         System.out.println("Expected output: 13, actual output: " + candy.candy(testRatings2));
         System.out.println("Expected output: 15, actual output: " + candy.candy(testRatings3));
         System.out.println("Expected output: 23, actual output: " + candy.candy(testRatings4));
+        System.out.println("Expected output: 16, actual output: " + candy.candy(testRatings5));
+        System.out.println("Expected output: 11, actual output: " + candy.candy(testRatings6));
+
+
 
     }
 
