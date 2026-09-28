@@ -22,13 +22,14 @@ public class RepeatedDNASequences {
         return new ArrayList<>(result);
     }
     public static void main(String args[]){
-        RepeatedDNASequences test = new RepeatedDNASequences();
-        String s1 = "TTTGTTTTTTTTTTTTTTTGTTTTTCTGCGCGGTTTTTTTCTGCGCGGTTTTTTTTTTTTTTTATTTTTTGTTT";
-        List<String> result = test.findRepeatedDnaSequences(s1);
-        System.out.print("[");
-        for(String sequence : result.reversed()){
-            System.out.print("\""+sequence+"\""+",");
-        }
-        System.out.print("]");
+//        RepeatedDNASequences test = new RepeatedDNASequences();
+//        String s1 = "TTTGTTTTTTTTTTTTTTTGTTTTTCTGCGCGGTTTTTTTCTGCGCGGTTTTTTTTTTTTTTTATTTTTTGTTT";
+//        List<String> result = test.findRepeatedDnaSequences(s1);
+//        System.out.print("[");
+//        for(String sequence : result.reversed()){
+//            System.out.print("\""+sequence+"\""+",");
+//        }
+//        System.out.print("]");
+
     }
 }
