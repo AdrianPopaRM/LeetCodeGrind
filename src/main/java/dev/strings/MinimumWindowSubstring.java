@@ -21,7 +21,7 @@ public class MinimumWindowSubstring {
             char currentCharacter = t.charAt(i);
             characterOccurrenceInT.put(currentCharacter, characterOccurrenceInT.getOrDefault(currentCharacter, 0) + 1);
             //This if condition checks out the edge case where appearances of a character in T > appearances in S
-            if (!characterIndexes.containsKey(currentCharacter)){
+            if (!characterIndexes.containsKey(currentCharacter)) {
                 return "";
             }
             if (characterOccurrenceInT.get(currentCharacter) > characterIndexes.get(currentCharacter).size()) {
@@ -33,17 +33,19 @@ public class MinimumWindowSubstring {
         //function for quickly accessing first element while also maintaining natural order
         NavigableSet<Integer> characterIndexSet = new TreeSet<>();
 
+
+        //Sorted the keys in the map by the number of indexes in S
         ArrayList<Character> charsToProcess = new ArrayList<>(characterOccurrenceInT.keySet());
-        charsToProcess.sort((c1,c2)->{
-           int size1=characterIndexes.get(c1).size();
-           int size2=characterIndexes.get(c2).size();
-           return Integer.compare(size1,size2);
+        charsToProcess.sort((c1, c2) -> {
+            int size1 = characterIndexes.get(c1).size();
+            int size2 = characterIndexes.get(c2).size();
+            return Integer.compare(size1, size2);
         });
 
         Character firstChar = charsToProcess.getLast();
         int startingIndexOfFirstChar = 0;
 
-        //Chose a random element to start from (in this case first character of t), and we choose our next
+        //Cose the element with most indexes available, and we choose our next
         //components for the minimum window substring around this first element indexes
         while (true) {
             characterIndexSet.clear();
@@ -67,82 +69,98 @@ public class MinimumWindowSubstring {
                 int requiredOccurrencesOfNextChar = characterOccurrenceInT.get(nextChar);
                 int totalSizeForCurrentChar = indexesForNextChar.size();
 
-                //If number of available indexes = number of required characters we add and continue to the next character
+                //If number of available indexes = number of required characters we add the slice and continue to the next character
                 if (totalSizeForCurrentChar == requiredOccurrencesOfNextChar) {
                     characterIndexSet.addAll(indexesForNextChar);
                     continue;
                 }
 
+                //Computing the first slice interval difference
                 int startingIndexOfNextChar = 0;
-                while (startingIndexOfNextChar < totalSizeForCurrentChar - requiredOccurrencesOfNextChar) {
-                    // This variable keeps track of how much the interval would grow if i used the current slice of nextChar
-                    int intervalDifferenceForCurrentSlice = 0;
+                int alreadyEstablishedIntervalLowerBound = characterIndexSet.first();
+                int alreadyEstablishedIntervalUpperBound = characterIndexSet.last();
 
-                    int indexOfLowerBoundOfCurrentSlice = indexesForNextChar.get(startingIndexOfNextChar);
-                    int indexOfUpperBoundOfCurrentSlice = indexesForNextChar.get(startingIndexOfNextChar + requiredOccurrencesOfNextChar - 1);
+                int indexOfLowerBoundOfCurrentSlice = indexesForNextChar.get(startingIndexOfNextChar);
+                int indexOfUpperBoundOfCurrentSlice = indexesForNextChar.get(startingIndexOfNextChar + requiredOccurrencesOfNextChar - 1);
 
-                    //This checks to see if lowerBound of nextChar interval is greater than already established interval
-                    if (indexOfLowerBoundOfCurrentSlice > characterIndexSet.first()) {
-                        //If upperbound is also lower than already established interval, the whole interval is contained so we add it
-                        if (indexOfUpperBoundOfCurrentSlice < characterIndexSet.last()) {
-                            characterIndexSet.addAll(indexesForNextChar.subList(startingIndexOfNextChar, startingIndexOfNextChar + requiredOccurrencesOfNextChar));
-                            break;
-                        }
-                        //If it got here, it means the upper bound is not contained so we add the difference
-                        intervalDifferenceForCurrentSlice += Math.abs(indexOfUpperBoundOfCurrentSlice - characterIndexSet.last());
-                    } else {
-                        intervalDifferenceForCurrentSlice += Math.abs(indexOfLowerBoundOfCurrentSlice - characterIndexSet.first());
+                // This variable keeps track of how much the interval would grow if i used the current slice of nextChar
+                int intervalDifferenceForPreviousSlice = getIntervalDifference(indexOfLowerBoundOfCurrentSlice, indexOfUpperBoundOfCurrentSlice, alreadyEstablishedIntervalLowerBound, alreadyEstablishedIntervalUpperBound);
 
-                        //Checks to see if upper bound is also not contained
-                        if (indexOfUpperBoundOfCurrentSlice > characterIndexSet.last()) {
-                            intervalDifferenceForCurrentSlice += Math.abs(indexOfUpperBoundOfCurrentSlice - characterIndexSet.last());
-                        }
-                    }
+                // If the previous slice is contained in the already established interval we just add it
+                if (intervalDifferenceForPreviousSlice == 0) {
+                    characterIndexSet.addAll(indexesForNextChar.subList(startingIndexOfNextChar, startingIndexOfNextChar + requiredOccurrencesOfNextChar));
+                    continue;
+                }
 
-                    int indexOfLowerBoundOfNextSlice = indexesForNextChar.get(startingIndexOfNextChar+1);
-                    int indexOfUpperBoundOfNextSlice = indexesForNextChar.get(startingIndexOfNextChar + requiredOccurrencesOfNextChar);
-                    int intervalDifferenceForNextSlice = 0;
+                startingIndexOfNextChar++;
 
-                    //Compute the intervalDifference for next possible slice
-                    if (indexOfLowerBoundOfNextSlice > characterIndexSet.first()) {
-                        if (indexOfUpperBoundOfNextSlice > characterIndexSet.last()) {
-                            intervalDifferenceForNextSlice += Math.abs(indexOfUpperBoundOfNextSlice - characterIndexSet.last());
-                        }
-                    } else {
-                        intervalDifferenceForNextSlice += Math.abs(indexOfLowerBoundOfNextSlice - characterIndexSet.first());
-                        if (indexOfUpperBoundOfNextSlice > characterIndexSet.last()) {
-                            intervalDifferenceForNextSlice += Math.abs(indexOfUpperBoundOfNextSlice - characterIndexSet.last());
-                        }
-                    }
+                while (startingIndexOfNextChar <= totalSizeForCurrentChar - requiredOccurrencesOfNextChar) {
+
+                    int indexOfLowerBoundOfNextSlice = indexesForNextChar.get(startingIndexOfNextChar);
+                    int indexOfUpperBoundOfNextSlice = indexesForNextChar.get(startingIndexOfNextChar + requiredOccurrencesOfNextChar-1);
+
+                    int intervalDifferenceForCurrentSlice = getIntervalDifference(indexOfLowerBoundOfNextSlice, indexOfUpperBoundOfNextSlice, alreadyEstablishedIntervalLowerBound, alreadyEstablishedIntervalUpperBound);
+
+
                     //If the next interval doesn't offer a better alternative, we add the current slice
-                    if(intervalDifferenceForCurrentSlice<intervalDifferenceForNextSlice){
+                    if (intervalDifferenceForPreviousSlice < intervalDifferenceForCurrentSlice) {
+                        startingIndexOfNextChar-=1;
                         characterIndexSet.addAll(indexesForNextChar.subList(startingIndexOfNextChar, startingIndexOfNextChar + requiredOccurrencesOfNextChar));
                         break;
+                    } else {
+                        intervalDifferenceForPreviousSlice=intervalDifferenceForCurrentSlice;
                     }
+
                     startingIndexOfNextChar++;
                 }
+
+
                 //If the while ended on the last valid slice, it means that this is the best one yet,and we need to add it
-                if(startingIndexOfNextChar==totalSizeForCurrentChar - requiredOccurrencesOfNextChar){
+                if (startingIndexOfNextChar-1 == totalSizeForCurrentChar - requiredOccurrencesOfNextChar) {
+                    startingIndexOfNextChar--;
                     characterIndexSet.addAll(indexesForNextChar.subList(startingIndexOfNextChar, startingIndexOfNextChar + requiredOccurrencesOfNextChar));
                 }
             }
-            if(minimumWindowSubstring.isEmpty()){
-                minimumWindowSubstring.append(s, characterIndexSet.first(), characterIndexSet.last()+1);
-            }
-            else{
-                if(minimumWindowSubstring.length()>characterIndexSet.last()-characterIndexSet.first()+1){
+
+            if (minimumWindowSubstring.isEmpty()) {
+                minimumWindowSubstring.append(s, characterIndexSet.first(), characterIndexSet.last() + 1);
+            } else {
+                if (minimumWindowSubstring.length() > characterIndexSet.last() - characterIndexSet.first() + 1) {
                     minimumWindowSubstring.delete(0, minimumWindowSubstring.length());
-                    minimumWindowSubstring.append(s, characterIndexSet.first(), characterIndexSet.last()+1);
+                    minimumWindowSubstring.append(s, characterIndexSet.first(), characterIndexSet.last() + 1);
                 }
             }
+
             startingIndexOfFirstChar++;
         }
         return minimumWindowSubstring.toString();
     }
 
-    public static void main(String args[]){
+    public int getIntervalDifference(int indexOfLowerBoundOfCurrentSlice, int indexOfUpperBoundOfCurrentSlice, int alreadyEstablishedIntervalLowerBound, int alreadyEstablishedIntervalUpperBound) {
+        int intervalDifferenceForCurrentSlice = 0;
+        //This checks to see if lowerBound of nextChar interval is greater than already established interval
+        if (indexOfLowerBoundOfCurrentSlice > alreadyEstablishedIntervalLowerBound) {
+            //If upperbound is also lower than already established interval, the whole interval is contained so we add it
+            if (indexOfUpperBoundOfCurrentSlice < alreadyEstablishedIntervalUpperBound) {
+                return 0;
+            }
+            //If it got here, it means the upper bound is not contained so we add the difference
+            intervalDifferenceForCurrentSlice += Math.abs(indexOfUpperBoundOfCurrentSlice - alreadyEstablishedIntervalUpperBound);
+        } else {
+            intervalDifferenceForCurrentSlice += Math.abs(indexOfLowerBoundOfCurrentSlice - alreadyEstablishedIntervalLowerBound);
+
+            //Checks to see if upper bound is also not contained
+            if (indexOfUpperBoundOfCurrentSlice > alreadyEstablishedIntervalUpperBound) {
+                intervalDifferenceForCurrentSlice += Math.abs(indexOfUpperBoundOfCurrentSlice - alreadyEstablishedIntervalUpperBound);
+            }
+        }
+        return intervalDifferenceForCurrentSlice;
+    }
+
+    public static void main(String args[]) {
         MinimumWindowSubstring test = new MinimumWindowSubstring();
-        System.out.println(test.minWindow("coobdafceeaxab","abc"));
+        System.out.println(test.minWindow("coobdafceeaxab", "abc"));
+        System.out.println(test.minWindow("wegdtzwabazduwwdysdetrrctotpcepalxdewzezbfewbabbseinxbqqplitpxtcwwhuyntbtzxwzyaufihclztckdwccpeyonumbpnuonsnnsjscrvpsqsftohvfnvtbphcgxyumqjzltspmphefzjypsvugqqjhzlnylhkdqmolggxvneaopadivzqnpzurmhpxqcaiqruwztroxtcnvhxqgndyozpcigzykbiaucyvwrjvknifufxducbkbsmlanllpunlyohwfsssiazeixhebipfcdqdrcqiwftutcrbxjthlulvttcvdtaiwqlnsdvqkrngvghupcbcwnaqiclnvnvtfihylcqwvderjllannflchdklqxidvbjdijrnbpkftbqgpttcagghkqucpcgmfrqqajdbynitrbzgwukyaqhmibpzfxmkoeaqnftnvegohfudbgbbyiqglhhqevcszdkokdbhjjvqqrvrxyvvgldtuljygmsircydhalrlgjeyfvxdstmfyhzjrxsfpcytabdcmwqvhuvmpssingpmnpvgmpletjzunewbamwiirwymqizwxlmojsbaehupiocnmenbcxjwujimthjtvvhenkettylcoppdveeycpuybekulvpgqzmgjrbdrmficwlxarxegrejvrejmvrfuenexojqdqyfmjeoacvjvzsrqycfuvmozzuypfpsvnzjxeazgvibubunzyuvugmvhguyojrlysvxwxxesfioiebidxdzfpumyon", "ozgzyywxvtublcl"));
 
 //        System.out.println(test.minWindow("a","a"));
 //        System.out.println(test.minWindow("a","aa").equals(""));
